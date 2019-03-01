@@ -57,12 +57,12 @@ tree.bind('<<TreeviewSelect>>', foo)
 tree.pack(padx=10, pady=10, fill='y', side='left')
 text = tkinter.Text(tk)
 text.pack(padx=10, pady=10, fill='y', side='right')
-btn = tkinter.Button(tk, text='儲存', command=bar)
+btn = tkinter.Button(tk, text='一鍵儲存', command=bar)
 btn.pack(fill="none", expand=True, side='bottom')
 
 # 詢問是否使用存在的 cookie 直接登入
-if messagebox.askyesno("Question", "自訂 Cookie？"):
-    jsessionid = simpledialog.askstring("Input", "JSESSIONID: ", parent=tk)
+if messagebox.askyesno("快速登入", "自訂 Cookies？"):
+    jsessionid = simpledialog.askstring("Cookies", "JSESSIONID: ", parent=tk)
     if jsessionid is not None:
         browser.get("https://zerojudge.tw/")
         browser.execute_script(
