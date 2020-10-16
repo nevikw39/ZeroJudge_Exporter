@@ -90,8 +90,7 @@ while not browser.current_url in ["https://zerojudge.tw/#", "https://zerojudge.t
 browser.get("https://zerojudge.tw/UserStatistic")  # 進入使用者解題統計葉面
 browser.execute_script(
     '''$('head').append('<link rel="stylesheet" href="https://bootswatch.com/3/cyborg/bootstrap.css" type="text/css" / > ');''')
-a = browser.find_element_by_xpath(
-    "/html/body/div[3]/div/div[1]/div/div[2]/p/a[1]")
+a = browser.find_element_by_xpath("/html/body/div[3]/div/div[1]/div/div[2]/div[3]/a")
 user = browser.find_element_by_xpath(
     '/html/body/div[3]/div/div[1]/div/div[2]/h4/span[1]/a').get_attribute("title")
 url = a.get_attribute("href")
@@ -105,10 +104,9 @@ s = requests.Session()
 for cookie in cookies:
     s.cookies.set(cookie['name'], cookie['value'])
 while True:
+    #print(url)
     lst = s.get(url)
     soup = BeautifulSoup(lst.text, 'html.parser')
-    if '沒有發現任何資料!!' in soup.select_one('body > div.container > div > table > tr:nth-child(2) > td').text:
-        break
     for i in soup.findAll('tr'):
         if i.has_attr("solutionid"):
             tds = i.findAll('td')
@@ -130,6 +128,8 @@ while True:
                 'https://zerojudge.tw/Solution.json?data=Code&solutionid=' + tds[0].text).json()['code'])}
     url = 'https://zerojudge.tw/Submissions' + \
         soup.select_one('#pagging').find('a', title='lastpage=')['href']
+    if len(soup.select("tr")) == 2:
+        break
 with open('zj.json', 'w') as f:
     json.dump(d, f)
 tk.mainloop()
